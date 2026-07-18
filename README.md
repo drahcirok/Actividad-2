@@ -177,15 +177,19 @@ Las principales mejoras implementadas son:
 
 ### Formulario principal
 
-![Formulario](img/formulario.png)
+<img width="1897" height="966" alt="image" src="https://github.com/user-attachments/assets/bfc56058-2a54-46e0-8c7b-c3abec1d2c39" />
 
 ### Validaciones
 
-![Validaciones](img/validaciones.png)
+<img width="1897" height="971" alt="image" src="https://github.com/user-attachments/assets/17795580-97ac-43f9-b590-bd1ea05ce4c0" />
+
+<img width="1900" height="977" alt="image" src="https://github.com/user-attachments/assets/20243943-d8c0-4e78-9195-04b9a20e0074" />
+
 
 ### Campos condicionales
 
-![Campos Condicionales](img/campos-condicionales.png)
+<img width="1881" height="975" alt="image" src="https://github.com/user-attachments/assets/a26925b2-9e02-4c74-8429-4b6fa98de15f" />
+
 
 ---
 
