@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Formulario de Admisiones | Clínica San José</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { clinic: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 900: '#172554' } },
+          boxShadow: { card: '0 16px 45px -20px rgba(15, 23, 42, .28)' }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer components {
+      .field-label { @apply mb-1.5 block text-sm font-semibold text-slate-700; }
+      .field-input { @apply block w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-clinic-500 focus:ring-4 focus:ring-clinic-100; }
+      .field-error { @apply border-red-500 focus:border-red-500 focus:ring-red-100; }
+      .field-valid { @apply border-emerald-500 focus:border-emerald-500 focus:ring-emerald-100; }
+      .error-message { @apply mt-1.5 hidden text-xs font-medium text-red-600; }
+      .wizard-step { @apply hidden opacity-0 translate-x-3; }
+      .wizard-step.active { @apply block animate-[stepIn_.35s_ease-out_forwards]; }
+      .nav-button { @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-50; }
+    }
+    @keyframes stepIn { to { opacity: 1; transform: translateX(0); } }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+  <header class="border-b border-slate-200 bg-white">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+      <a href="#" class="flex items-center gap-3" aria-label="Clínica San José, inicio">
+        <span class="grid h-10 w-10 place-items-center rounded-xl bg-clinic-600 text-white shadow-lg shadow-blue-200">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke-linecap="round"/></svg>
+        </span>
+        <span><span class="block text-sm font-bold leading-none text-clinic-900">Clínica San José</span><span class="mt-1 block text-xs text-slate-500">Atención que inspira confianza</span></span>
+      </a>
+      <span class="hidden items-center gap-2 text-sm font-medium text-slate-500 sm:flex"><span class="h-2 w-2 rounded-full bg-emerald-500"></span> Admisiones en línea</span>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:py-12">
+    <div class="grid gap-8 lg:grid-cols-[260px_1fr]">
+      <aside class="rounded-2xl bg-clinic-900 p-6 text-white shadow-card lg:min-h-[620px]">
+        <p class="text-sm font-medium text-blue-200">Nuevo paciente</p>
+        <h1 class="mt-2 text-2xl font-bold leading-tight">Formulario de<br>Admisiones</h1>
+        <p class="mt-4 text-sm leading-6 text-blue-100">Complete sus datos para agilizar su atención médica.</p>
+        <div class="mt-8 hidden space-y-5 lg:block" id="sidebarSteps" aria-label="Progreso de admisión">
+          <div class="progress-item flex items-center gap-3" data-step="1"><span class="step-dot grid h-7 w-7 place-items-center rounded-full bg-white text-xs font-bold text-clinic-700">1</span><span class="text-sm font-semibold">Datos personales</span></div>
+          <div class="progress-item flex items-center gap-3 text-blue-300" data-step="2"><span class="step-dot grid h-7 w-7 place-items-center rounded-full border border-blue-400 text-xs font-bold">2</span><span class="text-sm">Contacto</span></div>
+          <div class="progress-item flex items-center gap-3 text-blue-300" data-step="3"><span class="step-dot grid h-7 w-7 place-items-center rounded-full border border-blue-400 text-xs font-bold">3</span><span class="text-sm">Información médica</span></div>
+          <div class="progress-item flex items-center gap-3 text-blue-300" data-step="4"><span class="step-dot grid h-7 w-7 place-items-center rounded-full border border-blue-400 text-xs font-bold">4</span><span class="text-sm">Seguro médico</span></div>
+          <div class="progress-item flex items-center gap-3 text-blue-300" data-step="5"><span class="step-dot grid h-7 w-7 place-items-center rounded-full border border-blue-400 text-xs font-bold">5</span><span class="text-sm">Resumen</span></div>
+        </div>
+        <div class="mt-10 flex items-center gap-3 border-t border-blue-800 pt-5 text-xs text-blue-200"><svg class="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg> Su información se trata de forma confidencial.</div>
+      </aside>
+
+      <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-card">
+        <div class="border-b border-slate-100 px-5 py-5 sm:px-8">
+          <div class="mb-3 flex items-center justify-between"><p id="stepCounter" class="text-sm font-semibold text-clinic-600">Paso 1 de 5</p><p id="stepTitle" class="text-sm text-slate-500">Datos personales</p></div>
+          <div class="h-2 overflow-hidden rounded-full bg-slate-100"><div id="progressBar" class="h-full w-1/5 rounded-full bg-clinic-600 transition-all duration-500"></div></div>
+        </div>
+
+        <form id="admissionForm" novalidate class="p-5 sm:p-8">
+          <section class="wizard-step active" data-step="1">
+            <div class="mb-7"><h2 class="text-xl font-bold text-slate-900">Datos personales</h2><p class="mt-1 text-sm text-slate-500">Cuéntenos un poco sobre el paciente.</p></div>
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div><label class="field-label" for="patientId">ID del paciente <span class="text-red-500">*</span></label><input class="field-input" id="patientId" name="patientId" inputmode="numeric" maxlength="12" placeholder="Ej. 0102030405" required><p class="error-message"></p></div>
+              <div><label class="field-label" for="fullName">Nombre completo <span class="text-red-500">*</span></label><input class="field-input" id="fullName" name="fullName" autocomplete="name" placeholder="Ej. María López" required><p class="error-message"></p></div>
+              <div><label class="field-label" for="birthDate">Fecha de nacimiento <span class="text-red-500">*</span></label><input class="field-input" id="birthDate" name="birthDate" type="date" required><p class="error-message"></p></div>
+              <div><label class="field-label" for="age">Edad</label><div class="relative"><input class="field-input cursor-not-allowed bg-slate-50 pr-10 text-slate-500" id="age" name="age" type="text" placeholder="Se calcula automáticamente" readonly><svg class="absolute right-3 top-3.5 h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 15v-3m0-3h.01" stroke-linecap="round"/><circle cx="12" cy="12" r="9"/></svg></div></div>
+              <div class="sm:col-span-2"><label class="field-label" for="gender">Género <span class="text-red-500">*</span></label><select class="field-input" id="gender" name="gender" required><option value="">Seleccione una opción</option><option>Femenino</option><option>Masculino</option><option>No deseo especificar</option></select><p class="error-message"></p></div>
+            </div>
+          </section>
+
+          <section class="wizard-step" data-step="2">
+            <div class="mb-7"><h2 class="text-xl font-bold text-slate-900">Información de contacto</h2><p class="mt-1 text-sm text-slate-500">Usaremos estos datos solo para comunicarnos con usted.</p></div>
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div><label class="field-label" for="email">Correo electrónico <span class="text-red-500">*</span></label><input class="field-input" id="email" name="email" type="email" autocomplete="email" placeholder="nombre@correo.com" required><p class="error-message"></p></div>
+              <div><label class="field-label" for="phone">Teléfono <span class="text-red-500">*</span></label><input class="field-input" id="phone" name="phone" inputmode="numeric" maxlength="15" autocomplete="tel" placeholder="Ej. 0991234567" required><p class="error-message"></p></div>
+              <div><label class="field-label" for="country">País <span class="text-red-500">*</span></label><select class="field-input" id="country" name="country" required><option value="">Seleccione su país</option><option>Ecuador</option><option>Colombia</option><option>Perú</option><option>Otro</option></select><p class="error-message"></p></div>
+              <div><label class="field-label" for="address">Dirección <span class="text-red-500">*</span></label><input class="field-input" id="address" name="address" autocomplete="street-address" placeholder="Calle, número y sector" required><p class="error-message"></p></div>
+            </div>
+          </section>
+
+          <section class="wizard-step" data-step="3">
+            <div class="mb-7"><h2 class="text-xl font-bold text-slate-900">Información médica</h2><p class="mt-1 text-sm text-slate-500">Estos datos ayudan a preparar su atención.</p></div>
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div><label class="field-label" for="bloodType">Tipo de sangre <span class="text-red-500">*</span></label><select class="field-input" id="bloodType" name="bloodType" required><option value="">Seleccione</option><option>O+</option><option>O-</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>No lo sé</option></select><p class="error-message"></p></div>
+              <div><label class="field-label" for="consultationReason">Motivo de consulta <span class="text-red-500">*</span></label><select class="field-input" id="consultationReason" name="consultationReason" required><option value="">Seleccione un motivo</option><option>Consulta general</option><option>Control médico</option><option>Emergencia</option><option>Exámenes clínicos</option><option>Otro</option></select><p class="error-message"></p></div>
+              <div><label class="field-label" for="admissionDate">Fecha de ingreso</label><input class="field-input bg-slate-50 text-slate-600" id="admissionDate" name="admissionDate" type="date" readonly></div>
+              <div><label class="field-label" for="admissionTime">Hora de ingreso</label><input class="field-input bg-slate-50 text-slate-600" id="admissionTime" name="admissionTime" type="time" readonly></div>
+            </div>
+          </section>
+
+          <section class="wizard-step" data-step="4">
+            <div class="mb-7"><h2 class="text-xl font-bold text-slate-900">Seguro médico</h2><p class="mt-1 text-sm text-slate-500">Indíquenos si cuenta con cobertura médica.</p></div>
+            <fieldset><legend class="field-label">¿Tiene seguro médico? <span class="text-red-500">*</span></legend><div class="grid gap-3 sm:grid-cols-2"><label class="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 p-4 transition hover:border-clinic-500 has-[:checked]:border-clinic-600 has-[:checked]:bg-clinic-50"><input class="h-4 w-4 accent-clinic-600" type="radio" name="hasInsurance" value="Sí" required><span class="font-semibold text-slate-700">Sí, tengo seguro</span></label><label class="flex cursor-pointer items-center gap-3 rounded-xl border border-slate-200 p-4 transition hover:border-clinic-500 has-[:checked]:border-clinic-600 has-[:checked]:bg-clinic-50"><input class="h-4 w-4 accent-clinic-600" type="radio" name="hasInsurance" value="No"><span class="font-semibold text-slate-700">No tengo seguro</span></label></div><p id="insuranceError" class="error-message"></p></fieldset>
+            <div id="insuranceFields" class="mt-5 grid max-h-0 grid-cols-1 gap-5 overflow-hidden opacity-0 transition-all duration-300 sm:grid-cols-2" aria-hidden="true">
+              <div><label class="field-label" for="insurer">Aseguradora <span class="text-red-500">*</span></label><input class="field-input" id="insurer" name="insurer" placeholder="Nombre de la aseguradora"><p class="error-message"></p></div>
+              <div><label class="field-label" for="policyNumber">Número de póliza <span class="text-red-500">*</span></label><input class="field-input" id="policyNumber" name="policyNumber" placeholder="Ej. POL-123456"><p class="error-message"></p></div>
+            </div>
+          </section>
+
+          <section class="wizard-step" data-step="5" id="representativeStep">
+            <div class="mb-7"><span class="mb-2 inline-flex rounded-full bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">Paciente menor de edad</span><h2 class="text-xl font-bold text-slate-900">Representante legal</h2><p class="mt-1 text-sm text-slate-500">Necesitamos los datos de la persona responsable.</p></div>
+            <div class="grid gap-5 sm:grid-cols-2"><div><label class="field-label" for="representativeName">Nombre completo <span class="text-red-500">*</span></label><input class="field-input" id="representativeName" name="representativeName" autocomplete="name" placeholder="Nombre del representante"><p class="error-message"></p></div><div><label class="field-label" for="representativePhone">Teléfono <span class="text-red-500">*</span></label><input class="field-input" id="representativePhone" name="representativePhone" inputmode="numeric" maxlength="15" placeholder="Ej. 0991234567"><p class="error-message"></p></div></div>
+          </section>
+
+          <section class="wizard-step" data-step="summary">
+            <div class="mb-7"><div class="mb-3 grid h-11 w-11 place-items-center rounded-xl bg-emerald-50 text-emerald-600"><svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h2 class="text-xl font-bold text-slate-900">Revise la información</h2><p class="mt-1 text-sm text-slate-500">Verifique los datos antes de registrar al paciente.</p></div>
+            <div id="summaryContent" class="space-y-5"></div>
+          </section>
+
+          <div class="mt-9 flex items-center justify-between border-t border-slate-100 pt-5">
+            <button type="button" id="backButton" class="nav-button text-slate-600 hover:bg-slate-100"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m15 18-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg> Atrás</button>
+            <button type="button" id="nextButton" class="nav-button bg-clinic-600 text-white shadow-lg shadow-blue-200 hover:bg-clinic-700">Siguiente <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button type="submit" id="submitButton" class="nav-button hidden bg-emerald-600 px-6 text-white shadow-lg shadow-emerald-100 hover:bg-emerald-700">Registrar paciente <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="m5 12 4 4L19 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+  <div id="toast" class="pointer-events-none fixed bottom-5 right-5 z-50 translate-y-4 rounded-xl bg-slate-900 px-5 py-4 text-sm font-medium text-white opacity-0 shadow-xl transition-all duration-300" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
